@@ -48,7 +48,7 @@ Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('STO
 
 Vue.http.interceptors.push((request, next) => {
   let token = localStorage.getItem('STORAGE_TOKEN')
-  request.headers.set('Authorization', token)
+  request.headers.set('Authorization', 'Bearer ' + token)
   next(response => {
     return response
   })

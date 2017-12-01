@@ -46,7 +46,8 @@
         if (this.username !== '' && this.password !== '') {
           this.login()
         } else {
-          console.log('请输入用户名密码！')
+          this.messageShow = true
+          this.message = '请输入用户名和密码！'
         }
       },
       login () {
@@ -55,10 +56,11 @@
           password: this.password
         }
         var self = this
+        console.log(this.api['login'])
         this.$http.get(this.api['login'], {params: loginParam}).then(function (response) {
           // 响应成功回调
-          if (response.data.error_code === 0) {
-            localStorage.setItem('STORAGE_TOKEN', response.data.token)
+          if (response.data.code === 0) {
+            localStorage.setItem('STORAGE_TOKEN', response.data.result)
             self.$router.push('/index')
           } else {
             self.messageShow = true
@@ -67,7 +69,9 @@
           }
         }, function (response) {
           // 响应错误回调
-          console.log('error: ' + response.data.message)
+          self.messageShow = true
+          self.message = response.data.message || '服务器认证失败'
+          console.log(response)
           self.$router.push('/login')
         })
       }

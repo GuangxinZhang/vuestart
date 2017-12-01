@@ -51,6 +51,11 @@
           </v-flex>
         </v-layout>
       </v-container>
+      <v-container grid-list-md text-xs-center>
+        <div>
+          <v-btn color="primary" v-on:click="button">Primary</v-btn>
+        </div>
+      </v-container>
     </v-content>
   </div>
 </template>
@@ -94,6 +99,19 @@ export default {
         yAxisType: ['KMB', 'percent'],
         area: true
       }
+    }
+  },
+  methods: {
+    button () {
+      this.$http.get(this.api['user'], {}).then(function (response) {
+        // 响应成功回调
+        console.log('===============================')
+        console.log(response.data)
+      }, function (response) {
+        // 响应错误回调
+        console.log('-------------------------------')
+        console.log(response.data)
+      })
     }
   }
 }
