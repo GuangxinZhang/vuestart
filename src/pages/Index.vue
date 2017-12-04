@@ -1,117 +1,147 @@
 <template>
-  <div>
-    <app-layout></app-layout>
-    <v-content>
-      <v-container grid-list-md text-xs-center>
-        <v-layout row wrap>
-          <v-flex xs4>
-            <v-card>
-                <div>
-                  <ve-line
-                    :data="chartData"
-                    :colors="chartColors"
-                    :width="width"
-                    :height="height"
-                    :grid="grid"
-                    :scale="scale"
-                    :settings="chartSettings">
-                  </ve-line>
-                </div>
-            </v-card>
-          </v-flex>
-          <v-flex xs4>
-            <v-card>
-                <div>
-                  <ve-line
-                    :data="chartData"
-                    :colors="chartColors"
-                    :width="width"
-                    :height="height"
-                    :grid="grid"
-                    :scale="scale"
-                    :settings="chartSettings">
-                  </ve-line>
-                </div>
-            </v-card>
-          </v-flex>
-          <v-flex xs4>
-            <v-card>
-                <div>
-                  <ve-line
-                    :data="chartData"
-                    :colors="chartColors"
-                    :width="width"
-                    :height="height"
-                    :grid="grid"
-                    :scale="scale"
-                    :settings="chartSettings">
-                  </ve-line>
-                </div>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-      <v-container grid-list-md text-xs-center>
-        <div>
-          <v-btn color="primary" v-on:click="button">Primary</v-btn>
-        </div>
-      </v-container>
-    </v-content>
-  </div>
+  <v-container fluid>
+    <v-container grid-list-md text-xs-center>
+      <v-layout row wrap>
+        <v-flex lg3>
+          <v-card color="blue-grey darken-2" class="white--text">
+            <v-card-title primary-title>
+              <div class="headline">Unlimited music now</div>
+              <div>Listen to your favorite artists and albums whenever and wherever, online and offline.</div>
+            </v-card-title>
+            <v-card-actions>
+              <v-btn flat dark>Listen now</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+        <v-flex lg3>
+          <v-card color="blue-grey darken-2" class="white--text">
+            <v-card-title primary-title>
+              <div class="headline">Unlimited music now</div>
+              <div>Listen to your favorite artists and albums whenever and wherever, online and offline.</div>
+            </v-card-title>
+            <v-card-actions>
+              <v-btn flat dark>Listen now</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+        <v-flex lg3>
+          <v-card color="blue-grey darken-2" class="white--text">
+            <v-card-title primary-title>
+              <div class="headline">Unlimited music now</div>
+              <div>Listen to your favorite artists and albums whenever and wherever, online and offline.</div>
+            </v-card-title>
+            <v-card-actions>
+              <v-btn flat dark>Listen now</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+        <v-flex lg3>
+          <v-card color="blue-grey darken-2" class="white--text">
+            <v-card-title primary-title>
+              <div class="headline">Unlimited music now</div>
+              <div>Listen to your favorite artists and albums whenever and wherever, online and offline.</div>
+            </v-card-title>
+            <v-card-actions>
+              <v-btn flat dark>Listen now</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap>
+        <v-flex lg9>
+          <v-card ref="abc">
+            <ve-line :data="chartData" :settings="chartSettings" ref="chart1"></ve-line>
+          </v-card>
+        </v-flex>
+        <v-flex lg3>
+          <v-card>
+            <ve-line :data="chartData" :settings="chartSettings" ref="chart2"></ve-line>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+    <v-container grid-list-md text-xs-center>
+      <div>
+        <v-btn color="primary" v-on:click="button" ref="resize">Primary</v-btn>
+      </div>
+    </v-container>
+    <v-dialog v-model="dialog" max-width="500px">
+      <v-card>
+        <v-card-title>
+          提示信息
+        </v-card-title>
+        <v-card-text>
+          <span>{{ message }}</span>
+        </v-card-text>
+        <v-card-actions>
+          <v-card-text class="text-md-right">
+            <v-btn color="primary" flat @click.stop="dialog=false">关闭</v-btn>
+          </v-card-text>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </v-container>
 </template>
 
-<style>
-.echarts {
-  height: 300px;
-}
-</style>
-
 <script>
+import 'vuetify/dist/vuetify.min.css'
 export default {
+  props: {
+    drawer: {
+      type: Boolean
+    }
+  },
   data: function () {
     return {
+      dialog: false,
+      message: '',
       chartData: {
-        columns: ['日期', '销售额', '占比'],
+        columns: ['日期', '成本', '利润', '占比', '其他'],
         rows: [
-          { '日期': '1月1日', '销售额': 1523, '占比': 0.12 },
-          { '日期': '1月2日', '销售额': 1223, '占比': 0.345 },
-          { '日期': '1月3日', '销售额': 2123, '占比': 0.7 },
-          { '日期': '1月4日', '销售额': 4123, '占比': 0.31 },
-          { '日期': '1月5日', '销售额': 3123, '占比': 0.12 },
-          { '日期': '1月6日', '销售额': 7123, '占比': 0.65 }
+          { '日期': '1月1日', '成本': 1523, '利润': 1523, '占比': 0.12, '其他': 100 },
+          { '日期': '1月2日', '成本': 1223, '利润': 1523, '占比': 0.345, '其他': 100 },
+          { '日期': '1月3日', '成本': 2123, '利润': 1523, '占比': 0.7, '其他': 100 },
+          { '日期': '1月4日', '成本': 4123, '利润': 1523, '占比': 0.31, '其他': 100 },
+          { '日期': '1月5日', '成本': 3123, '利润': 1523, '占比': 0.12, '其他': 100 },
+          { '日期': '1月6日', '成本': 7123, '利润': 1523, '占比': 0.65, '其他': 100 }
         ]
       },
-      chartColors: [
-        '#19d4ae', '#5ab1ef', '#fa6e86',
-        '#ffb980', '#0067a6', '#c4b4e4',
-        '#d87a80', '#9cbbff', '#d9d0c7',
-        '#87a997', '#d49ea2', '#5b4947',
-        '#7ba3a8'
-      ],
-      grid: { left: 20, right: 20 },
-      scale: { y: false },
-      width: '90%',
-      height: '350px',
       chartSettings: {
-        axisSite: {
-          right: ['占比']
-        },
-        yAxisType: ['KMB', 'percent'],
+        stack: { '售价': ['成本', '利润'] },
         area: true
-      }
+      },
+      height: '350px'
     }
+  },
+  mounted: function () {
+    setTimeout(() => {
+      this.$refs[`chart1`].echarts.resize()
+      this.$refs[`chart2`].echarts.resize()
+    }, 200)
+    // this.$nextTick(function () {
+    //   this.$refs[`chart1`].echarts.resize()
+    //   this.$refs[`chart2`].echarts.resize()
+    // })
   },
   methods: {
     button () {
+      this.$refs[`chart1`].echarts.resize()
+      this.$refs[`chart2`].echarts.resize()
       this.$http.get(this.api['user'], {}).then(function (response) {
-        // 响应成功回调
-        console.log('===============================')
         console.log(response.data)
       }, function (response) {
-        // 响应错误回调
-        console.log('-------------------------------')
-        console.log(response.data)
+        this.dialog = true
+        this.message = '数据请求失败！' + response.data
+        console.log(response)
       })
+    }
+  },
+  watch: {
+    drawer (newValue, oldValue) {
+      setTimeout(() => {
+        this.$refs[`chart1`].echarts.resize()
+        this.$refs[`chart2`].echarts.resize()
+      }, 200)
     }
   }
 }

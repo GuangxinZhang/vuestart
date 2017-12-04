@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-app>
     <v-navigation-drawer
       fixed
       clipped
@@ -62,7 +62,7 @@
         </template>
       </v-list>
     </v-navigation-drawer>
-        <v-toolbar
+    <v-toolbar
       color="blue-grey darken-3"
       dark
       app
@@ -89,17 +89,35 @@
         </v-menu>
       </div>
     </v-toolbar>
+    <v-content>
+      <router-view :drawer="drawer">
+        <v-container fluid></v-container>
+      </router-view>
+    </v-content>
+    <v-footer app></v-footer>
     <v-dialog v-model="dialog" max-width="500px">
       <v-card>
         <v-card-title>
-          <span>退出成功！{{ seconds }}秒后跳转至登录页...</span>
-          <v-spacer></v-spacer>
+          提示信息
         </v-card-title>
+        <v-card-text>
+          <span>退出成功！{{ seconds }}秒后跳转至登录页...</span>
+        </v-card-text>
+        <v-card-actions>
+          <v-card-text class="text-md-right">
+            <v-btn color="primary" flat @click.stop="dialog=false">关闭</v-btn>
+          </v-card-text>
+        </v-card-actions>
       </v-card>
     </v-dialog>
-  </div>
+  </v-app>
 </template>
 
+<style>
+.flex {
+  flex:0 auto;
+}
+</style>
 <script>
   export default {
     data: () => ({
@@ -109,7 +127,7 @@
       drawer: null,
       items: [
         { icon: 'home', text: '概览', route: '/index' },
-        { icon: 'history', text: 'Frequently contacted' },
+        { icon: 'history', text: '后台管理', route: '/login' },
         { icon: 'content_copy', text: 'Duplicates' }
       ]
     }),

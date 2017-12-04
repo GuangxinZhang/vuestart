@@ -7,10 +7,12 @@ import router from './router'
 import Vuetify from 'vuetify'
 import VueResource from 'vue-resource'
 import Layout from './components/Layout'
-import VCharts from 'v-charts'
+// import VCharts from 'v-charts'
 import VeLine from 'v-charts/lib/line'
+import '../static/css/app.css'
+// import 'vuetify/dist/vuetify.min.css'
+import('../node_modules/vuetify/dist/vuetify.min.css')
 
-Vue.use(VCharts)
 Vue.use(Vuetify)
 Vue.use(VueResource)
 Vue.prototype.api = api
@@ -28,8 +30,10 @@ new Vue({
   components: { App }
 })
 
+Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('STORAGE_TOKEN')
+
+// 访问路由前判断token，没有token则跳转至登录页
 router.beforeEach((to, from, next) => {
-  console.log(to.matched)
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (!localStorage.getItem('STORAGE_TOKEN')) {
       next({
@@ -44,10 +48,13 @@ router.beforeEach((to, from, next) => {
   }
 })
 
-Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('STORAGE_TOKEN')
-
 Vue.http.interceptors.push((request, next) => {
   let token = localStorage.getItem('STORAGE_TOKEN')
+  if (!token || token === 'undefined') {
+    Vue.http.headers.common['Authorization'] = null
+    console.log(this)
+    router.push({ path: '/login' })
+  }
   request.headers.set('Authorization', 'Bearer ' + token)
   next(response => {
     return response

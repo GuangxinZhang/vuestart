@@ -1,32 +1,47 @@
 <template>
-  <v-layout row justify-center>
-    <v-dialog v-model="dialog" persistent max-width="500px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">用户登录</span> <v-chip v-model="messageShow" close>{{ message }}</v-chip>
-        </v-card-title>
-        <v-card-text>
-          <v-container grid-list-md>
-            <v-layout wrap>
-              <v-flex xs12>
-                <v-text-field v-model="username"label="账号" required></v-text-field>
-              </v-flex>
-              <v-flex xs12>
-                <v-text-field v-model="password" label="密码" type="password" required></v-text-field>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat >注册</v-btn>
-          <v-btn color="blue darken-1" flat v-on:click="submit">登录</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </v-layout>
+<v-app light color="grey lighten-3">
+  <v-content>
+    <v-container fill-height fluid>
+      <v-flex md4 offset-md4>
+        <v-card flat class="elevation-20">
+          <v-card-text>
+            <v-container fluid>
+              <v-layout row>
+                <v-flex xs12>
+                  <h1 class="text-md-center ma-5"> <font color="teal">VUE APP</font> </h1>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs8 offset-md2>
+                  <v-text-field v-model="username"label="Account" required></v-text-field>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs8 offset-md2>
+                  <v-text-field v-model="password" label="Password" type="password" required></v-text-field>
+                </v-flex>
+              </v-layout>
+              <v-layout row>
+                <v-flex xs12>
+                  <v-card-text class="text-md-right">
+                    <v-btn flat color="primary" v-on:click="submit"><font color="teal">登录</font></v-btn>
+                  </v-card-text>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-container>
+  </v-content>
+</v-app>
 </template>
-
+<style>
+input:-webkit-autofill {
+ -webkit-box-shadow: 0 0 0px 1000px white inset;
+ -webkit-text-fill-color: #333;
+}
+</style>
 <script>
   export default {
     name: 'Login',
@@ -51,27 +66,20 @@
         }
       },
       login () {
-        let loginParam = {
-          username: this.username,
-          password: this.password
-        }
         var self = this
-        console.log(this.api['login'])
-        this.$http.get(this.api['login'], {params: loginParam}).then(function (response) {
-          // 响应成功回调
+        this.$http.post(this.api['login'], {username: this.username, password: this.password}).then(function (response) {
           if (response.data.code === 0) {
-            localStorage.setItem('STORAGE_TOKEN', response.data.result)
+            console.log(response.data)
+            localStorage.setItem('STORAGE_TOKEN', response.data.data.token)
             self.$router.push('/index')
           } else {
             self.messageShow = true
-            self.message = response.data.message
-            console.log('error: ' + response.data.message)
+            self.message = response.data.msg
+            console.log('error: ' + response.data.msg)
           }
         }, function (response) {
-          // 响应错误回调
           self.messageShow = true
-          self.message = response.data.message || '服务器认证失败'
-          console.log(response)
+          self.message = response.data.msg || '服务器认证失败'
           self.$router.push('/login')
         })
       }
